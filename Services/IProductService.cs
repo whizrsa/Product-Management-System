@@ -5,9 +5,9 @@ namespace Product_Management_System.Services
     public interface IProductService
     {
         Task<IEnumerable<Product>> GetAll();
-        Task<Product> FindId(int id);
+        Task<Product> FindId(int? id);
         Task<Product> Create(Product product);
         Task<Product> Update(Product product);
-        Task<Product> Delete(int id);
+        Task<Product> Delete(Product product);
     }
 }
