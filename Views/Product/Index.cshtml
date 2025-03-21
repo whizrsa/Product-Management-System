@@ -21,7 +21,16 @@
                     <td>@item.ProductDescription</td>
                     <td>@item.Price</td>
                     <td>@item.ImageFileName</td>
-                    <td>@item.IsActive</td>
+                    <td>
+                        @if (item.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactive</span>
+                        }
+                    </td>
                     <td>@item.DateAdded.ToString("yyyy-MM-dd")</td>
                 }
             </tr>
