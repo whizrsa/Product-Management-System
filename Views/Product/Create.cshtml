@@ -1,5 +1,36 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Product_Management_System.Models.Product
+
+<div class="container">
+    <h1 class="text-center">Cerate Product</h1>
+    <form asp-controller="Product" asp-action="Create" method="post">
+        <div>
+            <label asp-for="ProductName" class="form-label">Product Name</label>
+            <input asp-for="ProductName" class="form-control" />
+        </div>
+
+        <div>
+            <label asp-for="ProductDescription" class="form-label">Product Description</label>
+            <input asp-for="ProductDescription" class="form-control" />
+        </div>
+
+        <div>
+            <label asp-for="Price" class="form-label">Price</label>
+            <input asp-for="Price" class="form-control" />
+        </div>
+
+        <div>
+            <label asp-for="ImageFileName" class="form-label">Image</label>
+            <input asp-for="ImageFileName" class="form-control" />
+        </div>
+
+        <div>
+            <label asp-for="DateAdded" class="form-label">Date Added</label>
+            <input asp-for="DateAdded" class="form-control" />
+        </div>
+
+        <div>
+            <label asp-for="IsActive" class="form-label">Status</label>
+            <input asp-for="IsActive" class="form-control" />
+        </div>
+    </form>
+</div>
