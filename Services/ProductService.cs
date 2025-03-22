@@ -7,12 +7,10 @@ namespace Product_Management_System.Services
     public class ProductService : IProductService
     {
         private readonly PmsDbContext _context;
-        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public ProductService(PmsDbContext context, IWebHostEnvironment hostingEnvironment)
+        public ProductService(PmsDbContext context)
         {
             _context = context;
-            _hostingEnvironment = hostingEnvironment;
         }
         public async Task<IEnumerable<Product>> GetAll()
         {
@@ -70,3 +68,4 @@ namespace Product_Management_System.Services
         }
     }
 }
+

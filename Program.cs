@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Product_Management_System.Data;
 using Product_Management_System.Models;
+using Product_Management_System.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,8 @@ builder.Services.AddDbContext<PmsDbContext>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PmsDbContext>();
+
+builder.Services.AddScoped<IProductService, ProductService>();  
 
 var app = builder.Build();
 
