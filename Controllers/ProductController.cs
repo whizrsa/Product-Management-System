@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Product_Management_System.Data;
 using Product_Management_System.Dto;
 using Product_Management_System.Models;
@@ -6,6 +7,7 @@ using Product_Management_System.Services;
 
 namespace Product_Management_System.Controllers
 {
+    [Authorize(Roles = "admin,staff")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
