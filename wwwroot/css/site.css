@@ -46,8 +46,8 @@ header .heading {
     color: #8C98A5;
 }
 
-.btn {
-    background-color: #376975;
+.bt {
+    background-color: #376975 !important;
 }
 
 .btn:hover{

@@ -55,7 +55,7 @@ namespace Product_Management_System.Services
 
         public async Task<Product> Update(Product product)
         {
-            var existingProduct = _context.Products.FindAsync(product.Id);
+            var existingProduct = await _context.Products.FindAsync(product.Id);
 
             if(existingProduct == null)
             {

@@ -20,7 +20,10 @@
                 <td>@item.ProductName</td>
                 <td>@item.ProductDescription</td>
                 <td>@item.Price</td>
-                <td><img src="/images/@item.ImageFileName" width="80"/> </td>
+                <td>
+                    <img src="/images/@item.ImageFileName" class="img-fluid" style="max-width: 40px; height: auto; object-fit: cover;" />
+                </td>
+
                 <td>
                     @if (item.IsActive)
                     {
@@ -33,10 +36,13 @@
                 </td>
                 <td>@item.DateAdded.ToString("yyyy-MM-dd")</td>
                 <td>
-                        <a asp-action="Edit" asp-route-Id="@item.Id" class="btn btn-primary">Edit</a>
+                        <a asp-controller="Product" asp-action="Edit" asp-route-productId="@item.Id" class="btn btn-primary">Edit</a>
                 </td>
                 <td>
-                        <a asp-action="Delete" asp-route-Id="@item.Id" class="btn btn-danger">Delete</a>
+                    <form asp-action="Delete" method="post">
+                            <input type="hidden" name="productId" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </td>
             </tr>
             }
