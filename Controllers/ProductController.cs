@@ -17,9 +17,13 @@ namespace Product_Management_System.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            var products = await _productService.GetAll();
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["CurrentFilter"] = searchString;
+
+            var products = await _productService.GetAll(sortOrder, searchString);
             return View(products);
         }
 

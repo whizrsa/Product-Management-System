@@ -1,3 +1,20 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    min-height: 100vh; /* Ensures the body takes 90% of the viewport height */
+}
+
+main{
+    flex-grow: 1;
+}
+
+
 header {
     display: flex;
     background-color: #376975;
@@ -13,6 +30,7 @@ header {
     left: 0;
     right: 0;
     z-index: 1000;
+    flex-shrink: 0;
 }
 
 header .heading {
@@ -65,14 +83,14 @@ header .heading {
     Footer Section
 */
 footer {
-    display:flex;
-    justify-content:center;
+    flex-shrink: 0; /* Prevents footer from shrinking */
+    display: flex;
+    justify-content: center;
     background-color: #376975;
     color: #8C98A5;
     text-align: center;
     align-items: center;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 8vh;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
 }
