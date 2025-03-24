@@ -20,7 +20,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PmsDbContext>();
 
-builder.Services.AddScoped<IProductService, ProductService>();  
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IStaffService, StaffService>();
+
 
 var app = builder.Build();
 

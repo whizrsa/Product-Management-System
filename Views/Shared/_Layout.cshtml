@@ -22,7 +22,7 @@
             if(User.IsInRole("admin"))
             {
                 <div class="nav-bar">
-                    <a asp-controller="#" asp-action="#" class="text-decoration">Staff</a>
+                    <a asp-controller="Staff" asp-action="Index" class="text-decoration">Staff</a>
                     <a asp-controller="Product" asp-action="Index" class="text-decoration-none">Products</a>
                     <a asp-controller="Product" asp-action="Create" class="text-decoration-none">Create Product</a>
                 </div>
@@ -38,9 +38,6 @@
                 <a asp-controller="Home" asp-action="Index" class="text-decoration-none">Home</a>
             </div>
         }
-
-        
-
 
         <partial name="_LoginPartial" />
 
