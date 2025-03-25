@@ -4,7 +4,6 @@ using Product_Management_System.Data;
 using Product_Management_System.Models;
 using Product_Management_System.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

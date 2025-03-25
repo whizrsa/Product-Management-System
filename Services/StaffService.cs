@@ -17,7 +17,7 @@ namespace Product_Management_System.Services
 
         public async Task<IEnumerable<ApplicationUser>> GetAllStaff(string searchString)
         {
-            var users = await _userManager.GetUsersInRoleAsync("Staff");
+            var users = await _userManager.GetUsersInRoleAsync("staff");
 
             if (!string.IsNullOrEmpty(searchString))
             {
