@@ -22,7 +22,6 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 
-
 var app = builder.Build();
 
 // Seed Database on Startup
