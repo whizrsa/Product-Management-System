@@ -21,6 +21,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
 
 var app = builder.Build();
 
