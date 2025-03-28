@@ -19,19 +19,18 @@ namespace Product_Management_System.Services
             _logger = logger;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string htmlMessage) // ✅ Make method async
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var smtpServer = _configuration["EmailSettings:SmtpServer"];
-            var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"]);
-            var senderEmail = _configuration["EmailSettings:SenderEmail"];
-            var senderPassword = _configuration["EmailSettings:SenderPassword"];
-            var enableSsl = bool.Parse(_configuration["EmailSettings:EnableSsl"]);
+            var smtpServer = _configuration["EmailConfiguration:SmtpServer"];
+            var smtpPort = int.Parse(_configuration["EmailConfiguration:Port"]);
+            var senderEmail = _configuration["EmailConfiguration:From"];
+            var senderPassword = _configuration["EmailConfiguration:Password"];
 
             using var client = new SmtpClient(smtpServer)
             {
                 Port = smtpPort,
                 Credentials = new NetworkCredential(senderEmail, senderPassword),
-                EnableSsl = enableSsl
+                EnableSsl = true
             };
 
             var mailMessage = new MailMessage
@@ -45,7 +44,7 @@ namespace Product_Management_System.Services
 
             try
             {
-                await client.SendMailAsync(mailMessage); // ✅ Now await works correctly
+                await client.SendMailAsync(mailMessage);
                 _logger.LogInformation($"Email sent to {email}");
             }
             catch (Exception ex)
