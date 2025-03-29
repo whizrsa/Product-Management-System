@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Product_Management_System.Data;
 using Product_Management_System.Models;
 using Product_Management_System.Services;
+using SendGrid.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,11 @@ builder.Services.AddDbContext<PmsDbContext>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PmsDbContext>();
+
+builder.Services.AddSendGrid(options =>
+{
+    options.ApiKey = builder.Configuration["SendGridKey"];
+});
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IStaffService, StaffService>();

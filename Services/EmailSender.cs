@@ -5,13 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using SendGrid.Helpers.Mail;
+using SendGrid;
 
 namespace Product_Management_System.Services
 {
     public class EmailSender : IEmailSender
     {
+        private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<EmailSender> _logger;
 
         public EmailSender(IConfiguration configuration, ILogger<EmailSender> logger)
         {
@@ -19,38 +21,35 @@ namespace Product_Management_System.Services
             _logger = logger;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
-            var smtpServer = _configuration["EmailConfiguration:SmtpServer"];
-            var smtpPort = int.Parse(_configuration["EmailConfiguration:Port"]);
-            var senderEmail = _configuration["EmailConfiguration:From"];
-            var senderPassword = _configuration["EmailConfiguration:Password"];
+            var sendGridKey = _configuration["SendGridKey"];
+            ArgumentNullException.ThrowIfNullOrEmpty(sendGridKey, nameof(sendGridKey));
+            await Execute(sendGridKey, subject, message, toEmail);
+        }
 
-            using var client = new SmtpClient(smtpServer)
-            {
-                Port = smtpPort,
-                Credentials = new NetworkCredential(senderEmail, senderPassword),
-                EnableSsl = true
-            };
+        public async Task Execute(string apiKey, string subject, string message, string toEmail)
+        {
+            var client = new SendGridClient(apiKey);
 
-            var mailMessage = new MailMessage
+            var msg = new SendGridMessage()
             {
-                From = new MailAddress(senderEmail),
+                From = new EmailAddress(_configuration["From"], _configuration["Name"]),
                 Subject = subject,
-                Body = htmlMessage,
-                IsBodyHtml = true
+                PlainTextContent = message,
+                HtmlContent = message
             };
-            mailMessage.To.Add(email);
 
-            try
-            {
-                await client.SendMailAsync(mailMessage);
-                _logger.LogInformation($"Email sent to {email}");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Email sending failed: {ex.Message}");
-            }
+            msg.AddTo(new EmailAddress(toEmail));
+
+            // Disable click tracking.
+            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
+            msg.SetClickTracking(false, false);
+
+            var response = await client.SendEmailAsync(msg);
+            _logger.LogInformation(response.IsSuccessStatusCode
+                                   ? $"Email to {toEmail} queued successfully!"
+                                   : $"Failure Email to {toEmail}");
         }
     }
 }
