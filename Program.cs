@@ -23,12 +23,17 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 
 builder.Services.AddSendGrid(options =>
 {
-    options.ApiKey = builder.Configuration["SendGridKey"];
+    options.ApiKey = builder.Configuration["EmailSettings:SendGridKey"]; //Access nested configuration
 });
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
 
 
 var app = builder.Build();

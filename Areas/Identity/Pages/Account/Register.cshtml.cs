@@ -121,7 +121,6 @@ namespace Product_Management_System.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser()
@@ -137,11 +136,10 @@ namespace Product_Management_System.Areas.Identity.Pages.Account
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
-                if (result.Succeeded) 
+                if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    //Default Role
                     await _userManager.AddToRoleAsync(user, "staff");
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -153,9 +151,24 @@ namespace Product_Management_System.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    try
+                    {
+                        await _emailSender.SendEmailAsync(
+                            Input.Email,
+                            "Confirm your email",
+                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
+                        );
 
+                        _logger.LogInformation($"Email sent to {Input.Email}."); // Log success
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error sending email to {Input.Email}: {ex.Message} {ex.StackTrace}"); // Log error
+                        ModelState.AddModelError(string.Empty, "Failed to send confirmation email. Please try again later.");
+                        return Page(); // Return to the registration page if email fails.
+                    }
+
+                    /*
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
@@ -165,7 +178,9 @@ namespace Product_Management_System.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
+                    */
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -176,19 +191,6 @@ namespace Product_Management_System.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private ApplicationUser CreateUser()
-        {
-            try
-            {
-                return Activator.CreateInstance<ApplicationUser>();
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
-            }
-        }
 
         private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
